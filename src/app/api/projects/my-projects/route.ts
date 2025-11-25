@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import connectToDatabase from '@/lib/mongodb';
+import dbConnect from '@/lib/mongodb';
 import Project from '@/models/Project';
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await connectToDatabase();
+    console.log('Fetching projects for Clerk user:', userId);
+
+    await dbConnect();
     await Project.init();
 
     // Fetch all projects for this user, sorted by newest first
@@ -20,6 +22,8 @@ export async function GET(req: NextRequest) {
     })
     .sort({ createdAt: -1 })
     .lean();
+
+    console.log(`Found ${projects.length} projects for user ${userId}`);
 
     // Flatten projectDetails for frontend
     const flattenedProjects = projects.map((p: any) => ({

@@ -49,8 +49,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid freelancer type' }, { status: 400 });
     }
 
-    if (!skills || skills.length === 0) {
-      return NextResponse.json({ error: 'Skills are required' }, { status: 400 });
+    if (!skills || skills.length < 3) {
+      return NextResponse.json({ error: 'At least 3 skills are required' }, { status: 400 });
     }
 
     if (!experienceLevel || !['junior', 'mid', 'senior'].includes(experienceLevel)) {
@@ -116,7 +116,8 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error('Create profile error:', error);
-    return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 

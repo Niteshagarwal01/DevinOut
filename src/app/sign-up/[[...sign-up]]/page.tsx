@@ -41,7 +41,7 @@ export default function SignUpPage() {
             },
           }}
           signInUrl="/sign-in"
-          afterSignUpUrl={selectedType === 'business' ? '/dashboard/business' : '/dashboard/freelancer'}
+          afterSignUpUrl="/onboarding"
           unsafeMetadata={{
             role: selectedType,
           }}
