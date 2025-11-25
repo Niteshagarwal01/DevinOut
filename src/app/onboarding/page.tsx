@@ -53,11 +53,11 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-[#8B0000] via-[#A52A2A] to-[#DC143C] flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900">Setting up your account...</h2>
-        <p className="text-gray-600 mt-2">Please wait a moment</p>
+        <Loader2 className="w-12 h-12 animate-spin text-amber-400 mx-auto mb-4" />
+        <h2 className="text-xl font-semibold text-white">Setting up your account...</h2>
+        <p className="text-amber-100 mt-2">Please wait a moment</p>
       </div>
     </div>
   );

@@ -32,6 +32,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
     }
 
+    // Ensure User model is registered
+    await User.init();
+
     // Create or update user in MongoDB
     const dbUser = await User.findOneAndUpdate(
       { clerkId: userId },

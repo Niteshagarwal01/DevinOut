@@ -1,230 +1,382 @@
 # DevinOut - AI-Powered Freelance Team Matching Platform
 
-DevinOut is an innovative platform that simplifies freelance hiring by using AI to match businesses with perfect designer-developer teams. Unlike traditional platforms, teams are **dynamically created** for each project based on requirements, skills, and availability.
+DevinOut is a revolutionary Indian freelance platform that uses AI to create perfect designer-developer teams for each project. Instead of browsing thousands of profiles, businesses get 3 curated teams instantly matched to their needs.
 
-## 🚀 Features
+## 🎯 The Problem We Solve
+
+Traditional freelance platforms force you to:
+- Browse through hundreds of freelancer profiles
+- Interview multiple candidates individually
+- Manage separate contracts with designer and developer
+- Pay high agency fees (30-50% markup)
+
+**DevinOut's Solution**: AI-powered instant team creation with transparent pricing - pay only ₹100-250 platform fee, negotiate directly with freelancers.
+
+## 🚀 Key Features
 
 ### For Business Owners
-- **AI Chat Assistant** - Conversational interface to gather project requirements
-- **Smart Budget Estimation** - Get instant cost estimates (Agency vs DevinOut)
-- **Dynamic Team Matching** - Receive 3 ranked team options (Premium, Pro, Freemium)
-- **3-Way Collaboration** - Real-time chat with your designer and developer
-- **Secure Payments** - Integrated Razorpay payment system
+- **🤖 AI Project Consultant** - Conversational chatbot analyzes your needs and provides detailed cost breakdowns
+- **⚡ Instant Team Matching** - Get 3 ranked designer+developer teams in seconds
+- **💰 Transparent Pricing** - Platform fee: ₹100-250 | No hidden charges | Direct negotiation with teams
+- **💬 3-Way Collaboration Hub** - Real-time chat with your designer and developer
+- **🔒 Secure Payments** - Razorpay integration for platform fees
+- **📊 Smart Analytics** - Cost comparison vs traditional agencies (save 35-45%)
 
-### For Freelancers
-- **Profile Management** - Showcase skills, portfolio, and experience
-- **Dynamic Team Formation** - Get matched with complementary freelancers
-- **Project Notifications** - Instant alerts when selected for a team
-- **Reputation Building** - Rating and review system
+### For Freelancers  
+- **👤 Rich Profile System** - Skills, portfolio, hourly rates, experience level
+- **🎯 Smart Matching** - AI pairs you with complementary designers/developers
+- **🔔 Instant Notifications** - Get alerted when selected for projects
+- **⭐ Reputation Building** - Ratings, reviews, and completed project tracking
+- **💼 Availability Toggle** - Control when you're open for new projects
+- **📈 Dashboard Analytics** - Track ongoing, pending, and completed projects
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
-- **Authentication**: Clerk (with Google Sign-In)
-- **Database**: MongoDB with Mongoose
-- **AI Chatbot**: OpenAI API (GPT-3.5-turbo)
-- **Payments**: Razorpay
-- **Deployment**: Vercel (recommended)
+### Frontend
+- **Framework**: Next.js 16 (App Router, React 19)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4 with custom royal theme
+- **UI Components**: Lucide React icons
+- **State Management**: React Hooks
+
+### Backend & Database
+- **API**: Next.js Route Handlers (Server Components)
+- **Database**: MongoDB Atlas with Mongoose ODM
+- **Authentication**: Clerk (Google OAuth, Email)
+- **Middleware**: Custom role-based routing
+
+### AI & Payments
+- **AI Chatbot**: Groq (Llama 3.3 70B model)
+- **Payment Gateway**: Razorpay (Test & Live modes)
+- **Real-time**: Polling-based chat updates (3s interval)
+
+### Deployment
+- **Hosting**: Vercel (recommended)
+- **Database**: MongoDB Atlas (Cloud)
+- **Environment**: Node.js 18+
 
 ## 📋 Prerequisites
 
-Before you begin, ensure you have the following installed:
-- Node.js 18+ and npm
-- MongoDB Atlas account (or local MongoDB)
-- Clerk account
-- OpenAI API account
-- Razorpay account
+- Node.js 18+ and npm/pnpm
+- MongoDB Atlas account (free tier works)
+- Clerk account (free tier available)
+- Groq API account (free tier available)
+- Razorpay account (test mode free)
 
 ## 🔧 Installation & Setup
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
-cd minorproject
+git clone https://github.com/Niteshagarwal01/DevinOut.git
+cd DevinOut
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Environment Variables Setup
+### 3. Environment Variables
 
-Create a `.env.local` file in the root directory with the following variables (see `.env.example`):
+Create `.env.local` in the root directory:
 
 ```env
-# Clerk Authentication (Get from https://clerk.com)
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_key_here
-CLERK_SECRET_KEY=sk_test_your_key_here
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
+CLERK_SECRET_KEY=sk_test_xxxxx
 
-# MongoDB (Get from https://www.mongodb.com/cloud/atlas)
+# MongoDB Atlas
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/devinout
 
-# OpenAI (Get from https://platform.openai.com)
-OPENAI_API_KEY=sk-your_openai_key_here
+# Groq AI (Free tier: 30 requests/min)
+GROQ_API_KEY=gsk_xxxxx
 
-# Razorpay (Get from https://razorpay.com)
-RAZORPAY_KEY_ID=rzp_test_your_key_id
-RAZORPAY_KEY_SECRET=your_key_secret
+# Razorpay (Test Mode)
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxxx
+RAZORPAY_KEY_SECRET=xxxxx
 ```
 
-### 4. Get API Keys
+### 4. Get Your API Keys
 
-#### Clerk Setup (Authentication + Google Sign-In)
-1. Go to [clerk.com](https://clerk.com) and sign up
-2. Create a new application
-3. Navigate to **Configure → Social Connections**
-4. Enable **Google** as a social login provider
-5. Copy your **Publishable Key** and **Secret Key** from the API Keys section
-6. Add them to `.env.local`
+#### 🔐 Clerk (Authentication)
+1. Visit [clerk.com](https://clerk.com) → Create application
+2. Enable **Google** in Social Connections
+3. Copy Publishable Key & Secret Key
+4. Add to `.env.local`
+5. Configure redirect URLs:
+   - Sign-in: `/sign-in`
+   - Sign-up: `/sign-up`
+   - After sign-in: `/onboarding`
 
-#### MongoDB Setup
-1. Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a database user (Database Access → Add New Database User)
-3. Whitelist your IP address (Network Access → Add IP Address)
-4. Click "Connect" → "Connect your application"
-5. Copy the connection string and add to `.env.local`
+#### 🍃 MongoDB Atlas
+1. Create account at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+2. Create free M0 cluster
+3. Database Access → Add user with read/write
+4. Network Access → Allow access from anywhere (0.0.0.0/0)
+5. Connect → Drivers → Copy connection string
+6. Replace `<password>` and `<dbname>` in connection string
 
-#### OpenAI Setup
-1. Sign up at [OpenAI Platform](https://platform.openai.com)
-2. Go to API Keys section
-3. Create a new API key
-4. Add it to `.env.local`
-5. **Important**: OpenAI charges per API call. Add billing method and monitor usage.
+#### 🤖 Groq (AI Chatbot)
+1. Sign up at [console.groq.com](https://console.groq.com)
+2. Create API key (free tier: 30 req/min, 14,400/day)
+3. Model used: `llama-3.3-70b-versatile`
+4. Add to `.env.local`
 
-#### Razorpay Setup
-1. Sign up at [Razorpay](https://razorpay.com)
-2. Switch to **Test Mode** (for development)
-3. Go to Settings → API Keys
-4. Copy **Key ID** and **Key Secret**
-5. Add them to `.env.local`
+#### 💳 Razorpay (Payments)
+1. Sign up at [razorpay.com](https://razorpay.com)
+2. Switch to **Test Mode** (top-right toggle)
+3. Settings → API Keys → Generate Test Keys
+4. Copy Key ID (starts with `rzp_test_`) and Secret
+5. For production: Complete KYC and use Live keys
 
-### 5. Run the Development Server
+### 5. Seed Database (Optional)
+
+```bash
+npm run seed
+```
+This creates sample freelancer profiles for testing team matching.
+
+### 6. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/                          # Next.js App Router
-│   ├── layout.tsx               # Root layout with ClerkProvider
-│   ├── page.tsx                 # Landing page
-│   ├── sign-in/[[...sign-in]]/  # Clerk sign-in page
-│   ├── sign-up/[[...sign-up]]/  # Clerk sign-up page
-│   ├── onboarding/              # Role selection page
-│   └── api/                     # API routes (to be created)
-├── lib/                         # Utility functions
-│   ├── mongodb.ts               # MongoDB connection
-│   ├── openai.ts                # OpenAI client
-│   ├── razorpay.ts              # Razorpay client
-│   └── utils.ts                 # Helper functions
-├── models/                      # Mongoose schemas
-│   ├── User.ts
-│   ├── FreelancerProfile.ts
-│   ├── Project.ts
-│   ├── ChatRoom.ts
-│   └── Notification.ts
-└── middleware.ts                # Clerk authentication middleware
+DevinOut/
+├── src/
+│   ├── app/                      # Next.js 16 App Router
+│   │   ├── layout.tsx           # Root layout with Clerk
+│   │   ├── page.tsx             # Landing page
+│   │   ├── about/               # About page
+│   │   ├── sign-in/             # Clerk auth pages
+│   │   ├── sign-up/
+│   │   ├── onboarding/          # Role selection
+│   │   ├── dashboard/
+│   │   │   ├── business/        # Business dashboard + AI chat
+│   │   │   │   └── teams/[id]/  # Team selection page
+│   │   │   └── freelancer/      # Freelancer dashboard
+│   │   ├── chat/[chatRoomId]/   # 3-way chat room
+│   │   └── api/                 # Backend routes
+│   │       ├── chatbot/         # AI conversation
+│   │       ├── teams/           # Team generation & selection
+│   │       ├── chat/            # Chat operations
+│   │       ├── payment/         # Razorpay integration
+│   │       └── projects/        # Project management
+│   ├── components/
+│   │   ├── Navbar.tsx           # Main navigation
+│   │   └── Footer.tsx           # Site footer
+│   ├── lib/
+│   │   ├── mongodb.ts           # DB connection
+│   │   ├── razorpay.ts          # Payment client
+│   │   └── utils.ts             # Utilities
+│   ├── models/                  # Mongoose schemas
+│   │   ├── User.ts              # User accounts
+│   │   ├── FreelancerProfile.ts # Freelancer details
+│   │   ├── Project.ts           # Project data
+│   │   ├── ChatRoom.ts          # Chat rooms
+│   │   └── Notification.ts      # User notifications
+│   └── middleware.ts            # Auth & routing
+├── scripts/
+│   └── seedFreelancers.ts       # Sample data
+├── public/                       # Static assets
+├── tailwind.config.ts           # Tailwind + custom theme
+└── next.config.ts               # Next.js config
 ```
 
-## 🔄 User Flow
+## 🔄 Complete User Flows
 
-### Business Owner Journey
-1. Sign Up → Choose "Business Owner"
-2. Chat with AI → Describe project
-3. Get Budget → Receive cost estimation
-4. Create Team → Click "Create My Team"
-5. View Teams → See 3 ranked options
-6. Select Team → Choose and pay (if needed)
-7. Collaborate → Start 3-way chat
+### 💼 Business Owner Journey
 
-### Freelancer Journey
-1. Sign Up → Choose "Freelancer" (Designer/Developer)
-2. Complete Profile → Add skills, portfolio
-3. Set Availability → Mark as available
-4. Get Matched → Included in team recommendations
-5. Receive Notification → Alerted when selected
-6. Join Project → Collaborate in 3-way chat
+1. **Sign Up** → Google/Email → Select "Business Owner"
+2. **AI Consultation** → 6-question chat about project needs
+3. **Project Analysis** → AI provides:
+   - Feature breakdown
+   - Cost estimation (Agency vs DevinOut)
+   - Timeline recommendations
+   - Smart suggestions
+4. **Team Creation** → Click "Create My Team"
+5. **View Options** → See 3 matched teams:
+   - **Premium** (₹250) - Top 5% talent
+   - **Pro** (₹100) - Experienced professionals
+   - **Freemium** (FREE) - Try platform
+6. **Select Team** → Pay platform fee (₹100-250) via Razorpay
+7. **3-Way Chat** → Collaborate with designer + developer
+8. **Negotiate** → Discuss project cost directly with team
+9. **Build** → Track progress in dashboard
 
-## 🧮 Team Matching Algorithm
+### 👨‍💻 Freelancer Journey
+
+1. **Sign Up** → Choose "Freelancer" → Select Designer/Developer
+2. **Create Profile** → Add:
+   - Skills & technologies
+   - Experience level (Junior/Mid/Senior)
+   - Hourly rate (₹/hour)
+   - Portfolio link
+   - Bio
+3. **Set Availability** → Toggle ON to be matched
+4. **Get Matched** → AI includes you in team recommendations
+5. **Notification** → Alerted when selected for project
+6. **Join Chat** → Access 3-way collaboration room
+7. **Negotiate** → Discuss scope and pricing with client
+8. **Deliver** → Build project and earn reputation
+
+## 🎯 AI Team Matching Algorithm
 
 ```javascript
-Score = Experience Points + Skill Match + (Rating × 10) 
-        + Completed Projects + Collaboration Bonus
+// Score calculation for each team combination
+function calculateMatchScore(designer, developer, project) {
+  let score = 0;
+  
+  // Experience scoring (15 points each)
+  score += experiencePoints[designer.experienceLevel] * 15;
+  score += experiencePoints[developer.experienceLevel] * 15;
+  
+  // Rating (max 50 points)
+  score += designer.rating * 10;
+  score += developer.rating * 10;
+  
+  // Completed projects (max 40 points)
+  score += Math.min(designer.completedProjects * 2, 20);
+  score += Math.min(developer.completedProjects * 2, 20);
+  
+  // Design complexity match (15 points)
+  if (matchesComplexity(designer, project.designComplexity)) {
+    score += 15;
+  }
+  
+  // Skills match (max 30 points)
+  score += calculateSkillsMatch(developer.skills, project.features);
+  
+  return score; // Max: ~150 points
+}
 
-Premium Team: Highest combined score
-Pro Team: Second highest
-Freemium Team: Third highest
+// Top 3 teams assigned tiers
+teams.sort((a, b) => b.score - a.score);
+teams[0].teamType = 'premium';  // Highest score
+teams[1].teamType = 'pro';      // Second
+teams[2].teamType = 'freemium'; // Third
 ```
+
+## 💰 Pricing Model
+
+### Platform Fees (What Users Pay)
+- **Premium Team**: ₹250 (unlock elite professionals)
+- **Pro Team**: ₹100 (unlock experienced devs)
+- **Freemium Team**: FREE (try platform risk-free)
+
+### What Happens After
+1. Pay platform fee → Unlock team access
+2. Join 3-way chat room
+3. Negotiate project cost directly with team
+4. Payment to freelancers is direct (not through platform)
+
+**Savings**: 35-45% compared to traditional agencies
 
 ## 🚧 Development Status
 
-### ✅ Completed
-- [x] Project setup with Next.js + TypeScript + Tailwind
-- [x] Clerk authentication with Google Sign-In
-- [x] MongoDB models and connection
-- [x] OpenAI and Razorpay integration setup
-- [x] Landing page
-- [x] Sign-in/Sign-up pages
-- [x] Onboarding page
+### ✅ Fully Implemented
+- [x] Authentication system (Clerk + Google OAuth)
+- [x] Role-based onboarding
+- [x] AI chatbot with Groq (Llama 3.3)
+- [x] MongoDB data models
+- [x] Business dashboard with AI chat
+- [x] Freelancer profile management
+- [x] Team matching algorithm
+- [x] Team selection & payment (Razorpay)
+- [x] 3-way chat rooms
+- [x] Real-time messaging (polling)
+- [x] Project tracking
+- [x] Notification system
+- [x] Responsive UI (mobile-first)
+- [x] About page with team section
 
-### 🔨 To Build Next
-- [ ] API routes for onboarding
-- [ ] Business dashboard with AI chatbot
-- [ ] Freelancer profile creation page
-- [ ] Team matching algorithm implementation
-- [ ] 3-way chat system
-- [ ] Payment integration
-- [ ] Notifications system
+### 🔨 Future Enhancements
+- [ ] WebSocket for real-time chat
+- [ ] File sharing in chat
+- [ ] Milestone-based payments
+- [ ] Freelancer verification system
+- [ ] Advanced filters for team selection
+- [ ] Video call integration
+- [ ] Mobile app (React Native)
 
-## 🌐 Deployment to Vercel
+## 🌐 Deployment Guide
 
-1. Push code to GitHub
-2. Go to [Vercel](https://vercel.com)
-3. Import your repository
-4. Add all environment variables from `.env.local`
-5. Deploy!
+### Deploy to Vercel
 
-## 🐛 Troubleshooting
+1. **Push to GitHub**
+```bash
+git add .
+git commit -m "Ready for deployment"
+git push origin main
+```
 
-**Clerk not working?**
-- Verify keys in `.env.local` start with `pk_test_` and `sk_test_`
-- Check middleware.ts is in the src directory
+2. **Deploy to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Add all environment variables from `.env.local`
+   - Deploy!
 
-**MongoDB connection error?**
-- Verify connection string format
-- Check IP whitelist in MongoDB Atlas
-- Ensure database user has read/write permissions
+3. **Update Clerk URLs**
+   - In Clerk dashboard, add production URLs
+   - Update allowed origins and redirect URLs
 
-**OpenAI errors?**
-- Confirm API key is valid
-- Check you have billing setup
-- Monitor usage limits
+4. **MongoDB Atlas**
+   - Add Vercel IP to whitelist (or use 0.0.0.0/0)
 
-**Razorpay issues?**
-- Use Test Mode keys during development
-- Verify both Key ID and Secret are set
+5. **Razorpay**
+   - Switch to Live mode for production
+   - Update keys in Vercel environment
 
-## 📚 Learn More
+## 🐛 Common Issues & Solutions
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Clerk Documentation](https://clerk.com/docs)
-- [MongoDB Mongoose Guide](https://mongoosejs.com/docs/guide.html)
-- [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
-- [Razorpay Documentation](https://razorpay.com/docs)
+**Chat not loading?**
+- Check chatRoomId in URL is valid
+- Verify User model is registered in API routes
+- Check Next.js 16 params are awaited
+
+**Team matching not working?**
+- Run `npm run seed` to create sample freelancers
+- Check MongoDB connection
+- Verify freelancers have `availabilityStatus: true`
+
+**Payment failing?**
+- Use Razorpay test cards in test mode
+- Verify both RAZORPAY_KEY_ID and SECRET are set
+- Check amount is passed correctly (in ₹, not paise)
+
+**AI chatbot errors?**
+- Verify Groq API key is valid
+- Check rate limits (30 req/min on free tier)
+- Monitor console for specific error messages
+
+## 📚 Tech Documentation
+
+- [Next.js 16 Docs](https://nextjs.org/docs)
+- [Clerk Authentication](https://clerk.com/docs)
+- [MongoDB + Mongoose](https://mongoosejs.com/docs/)
+- [Groq AI](https://console.groq.com/docs)
+- [Razorpay Integration](https://razorpay.com/docs/)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+
+## 👥 Team
+
+- **Nitesh Agarwal** - Full Stack Developer
+- Built for Minor Project 2025
 
 ## 📄 License
 
-Educational project for Minor Project submission.
+MIT License - Educational project for academic submission.
 
 ---
 
-**Built with ❤️ using Next.js, Clerk, MongoDB, OpenAI & Razorpay**
+**🎨 Built with passion using Next.js 16, Groq AI, MongoDB, Clerk & Razorpay**
+
+**⭐ Star this repo if you find it useful!**
 
