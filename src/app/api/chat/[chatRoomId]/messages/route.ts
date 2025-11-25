@@ -19,9 +19,6 @@ export async function GET(
 
     await dbConnect();
 
-    // Ensure User model is registered
-    await User.init();
-
     const chatRoom = await ChatRoom.findById(chatRoomId);
     
     if (!chatRoom) {
@@ -70,9 +67,6 @@ export async function POST(
     }
 
     await dbConnect();
-
-    // Ensure User model is registered
-    await User.init();
 
     const chatRoom = await ChatRoom.findById(chatRoomId);
     
