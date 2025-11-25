@@ -180,7 +180,7 @@ export default async function AboutPage() {
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
               <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
                 <img 
-                  src="/image.png" 
+                  src="/Shruti Bhargav.png" 
                   alt="Shruti Bhargav"
                   className="w-full h-full object-cover"
                 />
@@ -199,7 +199,7 @@ export default async function AboutPage() {
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
               <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
                 <img 
-                  src="/image.png" 
+                  src="/Navodyajain.png" 
                   alt="Navodya Jain"
                   className="w-full h-full object-cover"
                 />
@@ -218,7 +218,7 @@ export default async function AboutPage() {
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
               <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
                 <img 
-                  src="/image.png" 
+                  src="/Simoni Jain.png" 
                   alt="Simoni Jain"
                   className="w-full h-full object-cover"
                 />
@@ -237,7 +237,7 @@ export default async function AboutPage() {
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
               <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
                 <img 
-                  src="/image.png" 
+                  src="/Mohd Nebeel .png" 
                   alt="Mohd Nebeel"
                   className="w-full h-full object-cover"
                 />
