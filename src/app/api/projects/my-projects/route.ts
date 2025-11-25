@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
     }
 
     await connectToDatabase();
+    await Project.init();
 
     // Fetch all projects for this user, sorted by newest first
     const projects = await Project.find({ 

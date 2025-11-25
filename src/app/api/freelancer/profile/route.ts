@@ -13,6 +13,7 @@ export async function GET() {
     }
 
     await dbConnect();
+    await FreelancerProfile.init();
 
     const profile = await FreelancerProfile.findOne({ clerkId: userId });
 
@@ -57,6 +58,8 @@ export async function POST(req: Request) {
     }
 
     await dbConnect();
+    await User.init();
+    await FreelancerProfile.init();
 
     // Get Clerk user info
     const clerkUser = await currentUser();
@@ -128,6 +131,7 @@ export async function PATCH(req: Request) {
     const body = await req.json();
 
     await dbConnect();
+    await FreelancerProfile.init();
 
     const profile = await FreelancerProfile.findOneAndUpdate(
       { clerkId: userId },
