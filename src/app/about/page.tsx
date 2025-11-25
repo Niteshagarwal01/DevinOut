@@ -176,59 +176,79 @@ export default async function AboutPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {/* Team Member 1 */}
+            {/* Team Member 1 - Shruti Bhargav */}
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
-              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-royal-gradient rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
-                AK
+              <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
+                <img 
+                  src="/image.png" 
+                  alt="Shruti Bhargav"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
-                Aarav Kumar
+                Shruti Bhargav
               </h3>
-              <p className="text-sm text-[#8B0000] font-semibold mb-3">CEO & Founder</p>
+              <p className="text-xs text-gray-500 mb-2">Enroll: 07115602722</p>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">Frontend & Design</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Visionary leader with 10+ years in tech, passionate about connecting talent with opportunity.
+                Crafting beautiful and intuitive user interfaces with expertise in modern frontend technologies.
               </p>
             </div>
 
-            {/* Team Member 2 */}
+            {/* Team Member 2 - Navodya Jain */}
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
-              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-[#D4AF37] to-[#FFD700] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
-                PS
+              <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
+                <img 
+                  src="/image.png" 
+                  alt="Navodya Jain"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
-                Priya Sharma
+                Navodya Jain
               </h3>
-              <p className="text-sm text-[#8B0000] font-semibold mb-3">CTO & Co-Founder</p>
+              <p className="text-xs text-gray-500 mb-2">Enroll: 09815602722</p>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">Product Management & Research</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                AI expert and tech innovator, building the future of intelligent team matching.
+                Leading product strategy and conducting in-depth research to drive innovation and user satisfaction.
               </p>
             </div>
 
-            {/* Team Member 3 */}
+            {/* Team Member 3 - Simoni Jain */}
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
-              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-[#8B0000] to-[#DC143C] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
-                RV
+              <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
+                <img 
+                  src="/image.png" 
+                  alt="Simoni Jain"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
-                Rohan Verma
+                Simoni Jain
               </h3>
-              <p className="text-sm text-[#8B0000] font-semibold mb-3">Head of Design</p>
+              <p className="text-xs text-gray-500 mb-2">Enroll: 06615602722</p>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">Frontend & Design</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Design maestro crafting premium experiences that delight users and clients alike.
+                Creating seamless user experiences with a keen eye for design aesthetics and functionality.
               </p>
             </div>
 
-            {/* Team Member 4 */}
+            {/* Team Member 4 - Mohd Nebeel */}
             <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
-              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-[#8B0000] to-[#DC143C] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
-                SM
+              <div className="w-24 h-24 lg:w-28 lg:h-28 mx-auto mb-4 rounded-full overflow-hidden shadow-royal">
+                <img 
+                  src="/image.png" 
+                  alt="Mohd Nebeel"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
-                Sneha Mehta
+                Mohd Nebeel
               </h3>
-              <p className="text-sm text-[#8B0000] font-semibold mb-3">Head of Operations</p>
+              <p className="text-xs text-gray-500 mb-2">Enroll: 08715602722</p>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">Backend Development</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Operations expert ensuring seamless collaboration and world-class client service.
+                Building robust and scalable backend systems that power seamless digital experiences.
               </p>
             </div>
           </div>
