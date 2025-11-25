@@ -18,11 +18,17 @@ interface Project {
   numPages: number;
   timeline: string;
   budgetRange: string;
-  status: 'chatting' | 'team_presented' | 'team_selected';
+  status: 'chatting' | 'team_presented' | 'awaiting_acceptance' | 'team_accepted' | 'team_selected';
   selectedTeamType?: 'premium' | 'pro' | 'freemium';
   chatRoomId?: string;
   createdAt: string;
   updatedAt: string;
+  selectedTeam?: {
+    designerAccepted?: boolean;
+    developerAccepted?: boolean;
+    designerRejected?: boolean;
+    developerRejected?: boolean;
+  };
 }
 
 export default function BusinessDashboard() {
@@ -136,6 +142,8 @@ export default function BusinessDashboard() {
     const badges = {
       chatting: { label: 'Planning', color: 'bg-[#FFF8DC] text-[#8B0000] border border-[#8B0000]/20' },
       team_presented: { label: 'Teams Ready', color: 'bg-[#8B0000]/10 text-[#8B0000] border border-[#8B0000]/30' },
+      awaiting_acceptance: { label: 'Awaiting Response', color: 'bg-[#FFD700]/20 text-[#8B0000] border border-[#D4AF37]' },
+      team_accepted: { label: 'Team Ready', color: 'bg-green-100 text-green-700 border border-green-300' },
       team_selected: { label: 'Active', color: 'bg-gradient-to-r from-[#8B0000] to-[#DC143C] text-white' },
       in_progress: { label: 'In Progress', color: 'bg-[#D4AF37]/20 text-[#8B0000] border border-[#D4AF37]' },
       completed: { label: 'Completed', color: 'bg-gray-100 text-gray-700 border border-gray-300' }

@@ -211,8 +211,8 @@ export default function TeamsPage() {
         throw new Error(data.error || 'Failed to select team');
       }
 
-      alert('Team selected! Chat room created successfully.');
-      router.push(`/chat/${data.chatRoomId}`);
+      alert('Team selected! Invitations sent to freelancers. You will be notified when they respond.');
+      router.push('/dashboard/business');
     } catch (error: any) {
       console.error('Error selecting team:', error);
       alert(error.message || 'Failed to select team');

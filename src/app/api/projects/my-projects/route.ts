@@ -16,16 +16,16 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     // Fetch all projects for this user, sorted by newest first
-    const projects = await Project.find({ 
+    const rawProjects = await Project.find({ 
       clerkId: userId 
     })
     .sort({ createdAt: -1 })
     .lean();
 
-    console.log(`Found ${projects.length} projects for user ${userId}`);
+    console.log(`Found ${rawProjects.length} projects for user ${userId}`);
 
     // Flatten projectDetails for frontend
-    const flattenedProjects = projects.map((p: any) => ({
+    const projects = rawProjects.map((p: any) => ({
       _id: p._id,
       websiteType: p.projectDetails?.websiteType || '',
       designComplexity: p.projectDetails?.designComplexity || '',
@@ -35,14 +35,20 @@ export async function GET(req: NextRequest) {
       budgetRange: p.projectDetails?.budgetRange || '',
       status: p.status,
       selectedTeamType: p.selectedTeam?.teamType || null,
-      chatRoomId: p.chatRoomId || null,
+      chatRoomId: p.chatRoomId,
       createdAt: p.createdAt,
-      updatedAt: p.updatedAt
+      updatedAt: p.updatedAt,
+      selectedTeam: {
+        designerAccepted: p.selectedTeam?.designerAccepted || false,
+        developerAccepted: p.selectedTeam?.developerAccepted || false,
+        designerRejected: p.selectedTeam?.designerRejected || false,
+        developerRejected: p.selectedTeam?.developerRejected || false,
+      }
     }));
 
     return NextResponse.json({ 
       success: true, 
-      projects: flattenedProjects 
+      projects 
     });
 
   } catch (error: any) {

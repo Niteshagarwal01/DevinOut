@@ -3,7 +3,7 @@ import mongoose, { Schema, models } from 'mongoose';
 export interface INotification {
   userId: mongoose.Types.ObjectId;
   clerkId: string;
-  type: 'team_selection' | 'message' | 'payment' | 'project_update';
+  type: 'invitation' | 'team_selection' | 'message' | 'payment' | 'project_update';
   title: string;
   message: string;
   projectId?: mongoose.Types.ObjectId;
@@ -24,7 +24,7 @@ const NotificationSchema = new Schema<INotification>(
     },
     type: {
       type: String,
-      enum: ['team_selection', 'message', 'payment', 'project_update'],
+      enum: ['invitation', 'team_selection', 'message', 'payment', 'project_update'],
       required: true,
     },
     title: {

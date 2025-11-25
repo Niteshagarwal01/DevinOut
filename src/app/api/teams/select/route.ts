@@ -47,75 +47,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Business owner not found' }, { status: 404 });
     }
 
-    // Check if chat room already exists for this project
-    let chatRoom = await ChatRoom.findOne({ projectId: project._id });
-
-    if (!chatRoom) {
-      // Create new chat room with proper participant structure
-      chatRoom = await ChatRoom.create({
-        projectId: project._id,
-        participants: [
-          {
-            userId: businessOwner._id,
-            clerkId: businessOwner.clerkId,
-            role: 'business' as const,
-            name: businessOwner.name
-          },
-          {
-            userId: designerProfile.userId._id,
-            clerkId: (designerProfile.userId as any).clerkId,
-            role: 'designer' as const,
-            name: (designerProfile.userId as any).name
-          },
-          {
-            userId: developerProfile.userId._id,
-            clerkId: (developerProfile.userId as any).clerkId,
-            role: 'developer' as const,
-            name: (developerProfile.userId as any).name
-          }
-        ],
-        messages: [
-          {
-            senderId: businessOwner._id,
-            senderName: businessOwner.name,
-            message: `Welcome to the project chat! I'm excited to work with you both on this ${project.projectDetails.websiteType} project.`,
-            timestamp: new Date()
-          }
-        ]
-      });
-    } else {
-      // Update existing chat room participants if team changed
-      chatRoom.participants = [
-        {
-          userId: businessOwner._id,
-          clerkId: businessOwner.clerkId,
-          role: 'business' as const,
-          name: businessOwner.name
-        },
-        {
-          userId: designerProfile.userId._id,
-          clerkId: (designerProfile.userId as any).clerkId,
-          role: 'designer' as const,
-          name: (designerProfile.userId as any).name
-        },
-        {
-          userId: developerProfile.userId._id,
-          clerkId: (developerProfile.userId as any).clerkId,
-          role: 'developer' as const,
-          name: (developerProfile.userId as any).name
-        }
-      ];
-      await chatRoom.save();
-    }
-
-    // Update project
+    // Update project with selected team (NO chatroom yet)
     project.selectedTeam = {
       designerId: designerProfile.userId._id,
       developerId: developerProfile.userId._id,
-      teamType: teamType as 'premium' | 'pro' | 'freemium'
+      teamType: teamType as 'premium' | 'pro' | 'freemium',
+      designerAccepted: false,
+      developerAccepted: false,
+      designerRejected: false,
+      developerRejected: false,
     };
-    project.status = 'team_selected';
-    project.chatRoomId = chatRoom._id;
+    project.status = 'awaiting_acceptance';
+    project.invitationSentAt = new Date();
     
     if (teamType !== 'freemium' && paymentDetails) {
       project.paymentStatus = 'paid';
@@ -124,13 +67,13 @@ export async function POST(req: Request) {
 
     await project.save();
 
-    // Create notifications for freelancers
+    // Send INVITATION notifications to freelancers (not team_selection)
     await Notification.create({
       userId: designerProfile.userId._id,
       clerkId: (designerProfile.userId as any).clerkId,
-      type: 'team_selection',
-      title: 'New Project!',
-      message: `🎉 You've been selected for a new ${project.projectDetails.websiteType} project!`,
+      type: 'invitation',
+      title: 'New Project Invitation!',
+      message: `🎉 You've been invited to join a ${project.projectDetails.websiteType} project as the Designer. Accept within 48 hours!`,
       projectId: project._id,
       isRead: false
     });
@@ -138,16 +81,17 @@ export async function POST(req: Request) {
     await Notification.create({
       userId: developerProfile.userId._id,
       clerkId: (developerProfile.userId as any).clerkId,
-      type: 'team_selection',
-      title: 'New Project!',
-      message: `🎉 You've been selected for a new ${project.projectDetails.websiteType} project!`,
+      type: 'invitation',
+      title: 'New Project Invitation!',
+      message: `🎉 You've been invited to join a ${project.projectDetails.websiteType} project as the Developer. Accept within 48 hours!`,
       projectId: project._id,
       isRead: false
     });
 
     return NextResponse.json({ 
       success: true, 
-      chatRoomId: chatRoom._id 
+      message: 'Invitations sent to freelancers',
+      projectId: project._id
     });
 
   } catch (error: any) {

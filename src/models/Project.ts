@@ -21,8 +21,13 @@ export interface IProject {
     designerId: mongoose.Types.ObjectId;
     developerId: mongoose.Types.ObjectId;
     teamType: 'premium' | 'pro' | 'freemium';
+    designerAccepted?: boolean;
+    developerAccepted?: boolean;
+    designerRejected?: boolean;
+    developerRejected?: boolean;
   };
-  status: 'chatting' | 'team_presented' | 'team_selected' | 'in_progress' | 'completed' | 'cancelled';
+  status: 'chatting' | 'team_presented' | 'awaiting_acceptance' | 'team_accepted' | 'team_selected' | 'in_progress' | 'completed' | 'cancelled';
+  invitationSentAt?: Date;
   chatRoomId?: mongoose.Types.ObjectId;
   paymentStatus?: 'pending' | 'paid' | 'refunded';
   razorpayOrderId?: string;
@@ -59,11 +64,18 @@ const ProjectSchema = new Schema<IProject>(
       designerId: { type: Schema.Types.ObjectId, ref: 'User' },
       developerId: { type: Schema.Types.ObjectId, ref: 'User' },
       teamType: { type: String, enum: ['premium', 'pro', 'freemium'] },
+      designerAccepted: { type: Boolean, default: false },
+      developerAccepted: { type: Boolean, default: false },
+      designerRejected: { type: Boolean, default: false },
+      developerRejected: { type: Boolean, default: false },
     },
     status: {
       type: String,
-      enum: ['chatting', 'team_presented', 'team_selected', 'in_progress', 'completed', 'cancelled'],
+      enum: ['chatting', 'team_presented', 'awaiting_acceptance', 'team_accepted', 'team_selected', 'in_progress', 'completed', 'cancelled'],
       default: 'chatting',
+    },
+    invitationSentAt: {
+      type: Date,
     },
     chatRoomId: {
       type: Schema.Types.ObjectId,

@@ -25,11 +25,15 @@ interface Project {
   numPages: number;
   timeline: string;
   budgetRange: string;
-  status: 'chatting' | 'team_presented' | 'team_selected' | 'completed';
+  status: 'chatting' | 'team_presented' | 'awaiting_acceptance' | 'team_accepted' | 'team_selected' | 'completed';
   selectedTeamType?: 'premium' | 'pro' | 'freemium';
   chatRoomId?: string;
   createdAt: string;
   updatedAt: string;
+  myRole?: 'designer' | 'developer';
+  myAcceptance?: boolean;
+  myRejection?: boolean;
+  invitationSentAt?: string;
 }
 
 export default function FreelancerDashboard() {
@@ -47,6 +51,7 @@ export default function FreelancerDashboard() {
   const [loading, setLoading] = useState(true);
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [respondingTo, setRespondingTo] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProfile();
@@ -107,10 +112,59 @@ export default function FreelancerDashboard() {
     }
   };
 
+  const handleInvitationResponse = async (projectId: string, response: 'accept' | 'reject') => {
+    setRespondingTo(projectId);
+    try {
+      const res = await fetch('/api/projects/invitation/respond', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectId,
+          response
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // Refresh projects
+        await fetchProjects();
+        
+        // Show success message based on status
+        if (data.status === 'both_accepted') {
+          alert('🎉 Project accepted! Chat room is ready. Both team members accepted!');
+          if (data.chatRoomId) {
+            router.push(`/chat/${data.chatRoomId}`);
+          }
+        } else if (data.status === 'partial_acceptance') {
+          alert(`✅ You ${response}ed the project. ${data.message}`);
+          if (response === 'accept' && data.chatRoomId) {
+            router.push(`/chat/${data.chatRoomId}`);
+          }
+        } else if (data.status === 'waiting') {
+          alert(`✅ You ${response}ed the invitation. Waiting for the other freelancer to respond.`);
+        } else if (data.status === 'both_rejected') {
+          alert('Both freelancers rejected the project.');
+        }
+      } else {
+        alert(data.error || 'Failed to respond to invitation');
+      }
+    } catch (error) {
+      console.error('Failed to respond to invitation:', error);
+      alert('Failed to respond to invitation');
+    } finally {
+      setRespondingTo(null);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const badges = {
       chatting: { label: 'In Progress', color: 'bg-[#FFF8DC] text-[#8B0000] border border-[#8B0000]/20' },
       team_presented: { label: 'Pending', color: 'bg-[#8B0000]/10 text-[#8B0000] border border-[#8B0000]/30' },
+      awaiting_acceptance: { label: 'Invitation Pending', color: 'bg-[#FFD700]/20 text-[#8B0000] border border-[#D4AF37]' },
+      team_accepted: { label: 'Active', color: 'bg-gradient-to-r from-[#8B0000] to-[#DC143C] text-white' },
       team_selected: { label: 'Active', color: 'bg-gradient-to-r from-[#8B0000] to-[#DC143C] text-white' },
       completed: { label: 'Completed', color: 'bg-gray-100 text-gray-700 border border-gray-300' }
     };
@@ -127,6 +181,11 @@ export default function FreelancerDashboard() {
               {project.websiteType || 'Untitled Project'}
             </h3>
             {getStatusBadge(project.status)}
+            {project.myRole && (
+              <span className="px-3 py-1 bg-[#8B0000]/10 text-[#8B0000] text-xs rounded-lg font-semibold border border-[#8B0000]/20">
+                Your Role: {project.myRole}
+              </span>
+            )}
           </div>
           <p className="text-sm text-gray-500">
             Created {new Date(project.createdAt).toLocaleDateString('en-US', { 
@@ -137,13 +196,24 @@ export default function FreelancerDashboard() {
           </p>
         </div>
         {showAcceptButton && (
-          <button
-            onClick={() => router.push(`/dashboard/freelancer/projects/${project._id}`)}
-            className="px-6 py-3 bg-royal-gradient text-white rounded-xl font-bold shadow-royal hover:shadow-royal-lg transition-all flex items-center gap-2 transform hover:-translate-y-0.5"
-          >
-            <Bell className="w-5 h-5" />
-            View Invite
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => handleInvitationResponse(project._id, 'accept')}
+              disabled={respondingTo === project._id}
+              className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 transform hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {respondingTo === project._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle className="w-5 h-5" />}
+              Accept
+            </button>
+            <button
+              onClick={() => handleInvitationResponse(project._id, 'reject')}
+              disabled={respondingTo === project._id}
+              className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 transform hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {respondingTo === project._id ? <Loader2 className="w-5 h-5 animate-spin" /> : <XCircle className="w-5 h-5" />}
+              Reject
+            </button>
+          </div>
         )}
         {!showAcceptButton && project.chatRoomId && (
           <button
