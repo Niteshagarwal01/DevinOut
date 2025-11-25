@@ -1,22 +1,9 @@
+import Link from 'next/link';
 import { Crown, Target, Eye, Heart, Users, Award, Zap, Shield } from 'lucide-react';
-import { currentUser } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export default async function AboutPage() {
-  const user = await currentUser();
-  
-  // If user is signed in, redirect to appropriate dashboard
-  if (user) {
-    const role = user.unsafeMetadata?.role as string | undefined;
-    if (role === 'freelancer') {
-      redirect('/dashboard/freelancer');
-    } else {
-      redirect('/dashboard/business');
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream-light via-cream to-cream-dark font-poppins">
       <Navbar />
@@ -172,6 +159,82 @@ export default async function AboutPage() {
         </div>
       </section>
 
+      {/* Meet the Team Section */}
+      <section className="container mx-auto px-4 lg:px-8 py-12 lg:py-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 lg:mb-16">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-[#8B0000]/20 rounded-full text-[#8B0000] text-sm font-semibold mb-6 shadow-sm">
+              <Users className="w-4 h-4" />
+              Our Leadership
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-montserrat text-[#2C1810] mb-4">
+              Meet the Team
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              The visionaries behind DevinOut, dedicated to revolutionizing the freelance industry
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {/* Team Member 1 */}
+            <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
+              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-royal-gradient rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
+                AK
+              </div>
+              <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
+                Aarav Kumar
+              </h3>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">CEO & Founder</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Visionary leader with 10+ years in tech, passionate about connecting talent with opportunity.
+              </p>
+            </div>
+
+            {/* Team Member 2 */}
+            <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
+              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-[#D4AF37] to-[#FFD700] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
+                PS
+              </div>
+              <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
+                Priya Sharma
+              </h3>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">CTO & Co-Founder</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                AI expert and tech innovator, building the future of intelligent team matching.
+              </p>
+            </div>
+
+            {/* Team Member 3 */}
+            <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
+              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-[#8B0000] to-[#DC143C] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
+                RV
+              </div>
+              <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
+                Rohan Verma
+              </h3>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">Head of Design</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Design maestro crafting premium experiences that delight users and clients alike.
+              </p>
+            </div>
+
+            {/* Team Member 4 */}
+            <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-royal hover:shadow-royal-lg transition-all duration-300 hover:-translate-y-1 border border-[#8B0000]/10 text-center">
+              <div className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-br from-[#8B0000] to-[#DC143C] rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl lg:text-4xl font-bold font-montserrat shadow-royal">
+                SM
+              </div>
+              <h3 className="text-xl font-bold font-montserrat text-[#2C1810] mb-1">
+                Sneha Mehta
+              </h3>
+              <p className="text-sm text-[#8B0000] font-semibold mb-3">Head of Operations</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Operations expert ensuring seamless collaboration and world-class client service.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="container mx-auto px-4 lg:px-8 py-12 lg:py-20">
         <div className="max-w-4xl mx-auto text-center">
@@ -182,18 +245,18 @@ export default async function AboutPage() {
             Join the community of visionaries building extraordinary projects
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/sign-up"
               className="px-8 lg:px-10 py-4 lg:py-5 bg-royal-gradient text-white rounded-xl font-bold shadow-royal hover:shadow-royal-lg transition-all duration-300 transform hover:-translate-y-1 text-base lg:text-lg"
             >
               Start Your Project
-            </a>
-            <a
+            </Link>
+            <Link
               href="/sign-up?type=freelancer"
               className="px-8 lg:px-10 py-4 lg:py-5 bg-white text-[#8B0000] rounded-xl font-bold border-2 border-[#8B0000] hover:bg-[#8B0000] hover:text-white transition-all duration-300 shadow-md text-base lg:text-lg"
             >
               Join as Freelancer
-            </a>
+            </Link>
           </div>
         </div>
       </section>

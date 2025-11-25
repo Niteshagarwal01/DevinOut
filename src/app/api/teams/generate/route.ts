@@ -78,6 +78,9 @@ export async function POST(req: Request) {
 
     await dbConnect();
 
+    // Ensure User model is registered (needed for populate to work)
+    await User.init();
+
     // Get project
     const project = await Project.findById(projectId);
     if (!project) {
@@ -159,24 +162,17 @@ export async function POST(req: Request) {
        project.projectDetails.designComplexity === 'moderate' ? 20 : 10)
     );
 
+    // Platform fees for unlocking premium teams
+    const PLATFORM_FEES = {
+      premium: 250, // ₹250 to unlock Premium team
+      pro: 100,     // ₹100 to unlock Pro team
+      freemium: 0   // Free
+    };
+
     // Format response
     const teams = topTeams.map(team => {
-      let estimatedCost = 0;
-      
-      // Get actual hourly rates from team members
-      const designerRate = team.designer.hourlyRate || 1000; // fallback rate
-      const developerRate = team.developer.hourlyRate || 1200; // fallback rate
-      const avgHourlyRate = (designerRate + developerRate) / 2;
-      
-      if (team.teamType === 'premium') {
-        // Premium: Full budget or estimated hours * avg hourly rate
-        estimatedCost = Math.min(maxBudget, Math.round(estimatedHours * avgHourlyRate));
-      } else if (team.teamType === 'pro') {
-        // Pro: 85% of premium cost
-        const premiumCost = Math.min(maxBudget, Math.round(estimatedHours * avgHourlyRate));
-        estimatedCost = Math.round(premiumCost * 0.85);
-      }
-      // Freemium is always 0
+      // Platform fee based on team type
+      const platformFee = PLATFORM_FEES[team.teamType];
 
       return {
         teamType: team.teamType,
@@ -203,8 +199,9 @@ export async function POST(req: Request) {
           portfolioLink: team.developer.portfolioLink,
           bio: team.developer.bio
         },
-        estimatedCost,
-        estimatedHours // Include this so frontend can show breakdown
+        platformFee, // Platform unlock fee
+        estimatedHours, // Total estimated hours for the project
+        estimatedProjectCost: team.teamType === 'freemium' ? 0 : Math.min(maxBudget, Math.round(estimatedHours * ((team.designer.hourlyRate || 1000) + (team.developer.hourlyRate || 1200)) / 2)) // Show project estimate
       };
     });
 

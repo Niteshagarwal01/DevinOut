@@ -3,6 +3,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import dbConnect from '@/lib/mongodb';
 import ChatRoom from '@/models/ChatRoom';
 import Project from '@/models/Project';
+import User from '@/models/User';
 
 // GET - Fetch chat room by project ID
 export async function GET(request: NextRequest) {
@@ -20,6 +21,9 @@ export async function GET(request: NextRequest) {
     }
 
     await dbConnect();
+
+    // Ensure User model is registered
+    await User.init();
 
     const project = await Project.findById(projectId);
     

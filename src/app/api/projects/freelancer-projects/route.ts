@@ -4,6 +4,7 @@ import connectToDatabase from '@/lib/mongodb';
 import Project from '@/models/Project';
 import ChatRoom from '@/models/ChatRoom';
 import FreelancerProfile from '@/models/FreelancerProfile';
+import User from '@/models/User';
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,6 +15,9 @@ export async function GET(req: NextRequest) {
     }
 
     await connectToDatabase();
+
+    // Ensure User model is registered
+    await User.init();
 
     // Get freelancer profile
     const freelancerProfile = await FreelancerProfile.findOne({ clerkId: userId });
@@ -49,6 +53,7 @@ export async function GET(req: NextRequest) {
       budgetRange: p.projectDetails?.budgetRange || '',
       status: p.status,
       selectedTeamType: p.selectedTeam?.teamType || null,
+      chatRoomId: p.chatRoomId,
       createdAt: p.createdAt,
       updatedAt: p.updatedAt
     }));

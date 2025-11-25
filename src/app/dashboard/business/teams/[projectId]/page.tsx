@@ -33,7 +33,9 @@ interface Team {
   score: number;
   designer: TeamMember;
   developer: TeamMember;
-  estimatedCost: number;
+  platformFee: number;
+  estimatedHours: number;
+  estimatedProjectCost: number;
 }
 
 interface Project {
@@ -101,14 +103,14 @@ export default function TeamsPage() {
   const initiatePayment = async (team: Team) => {
     setProcessingPayment(true);
     try {
-      // Create Razorpay order
+      // Create Razorpay order for platform fee only
       const orderResponse = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: team.estimatedCost,
+          amount: team.platformFee,
           projectId,
           teamType: team.teamType,
         }),
@@ -123,10 +125,10 @@ export default function TeamsPage() {
       // Open Razorpay checkout
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: team.estimatedCost * 100, // Razorpay expects paise
+        amount: team.platformFee * 100, // Razorpay expects paise
         currency: 'INR',
         name: 'DevinOut',
-        description: `${team.teamType.charAt(0).toUpperCase() + team.teamType.slice(1)} Team - ${project?.projectDetails.websiteType}`,
+        description: `${team.teamType.charAt(0).toUpperCase() + team.teamType.slice(1)} Team Access Fee`,
         order_id: orderData.orderId,
         handler: async function (response: any) {
           // Payment successful, select team
@@ -137,7 +139,7 @@ export default function TeamsPage() {
           email: user?.primaryEmailAddress?.emailAddress,
         },
         theme: {
-          color: '#2563eb',
+          color: '#8B0000',
         },
       };
 
@@ -421,10 +423,9 @@ export default function TeamsPage() {
                   </div>
                 ) : (
                   <div>
-                    <p className="text-4xl lg:text-5xl font-bold font-montserrat mb-2">₹{team.estimatedCost.toLocaleString('en-IN')}</p>
-                    <p className="text-sm opacity-90">
-                      {team.teamType === 'pro' ? 'Premium quality developers' : 'Elite top-tier professionals'}
-                    </p>
+                    <p className="text-4xl lg:text-5xl font-bold font-montserrat mb-2">₹{team.platformFee}</p>
+                    <p className="text-sm opacity-90">Platform Access Fee</p>
+                    <p className="text-xs opacity-75 mt-1">Estimated Project: ₹{team.estimatedProjectCost.toLocaleString('en-IN')}</p>
                   </div>
                 )}
               </div>
@@ -547,7 +548,7 @@ export default function TeamsPage() {
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       <IndianRupee className="w-5 h-5" />
-                      Pay ₹{team.estimatedCost.toLocaleString('en-IN')}
+                      Unlock for ₹{team.platformFee}
                     </span>
                   )}
                 </button>
@@ -573,22 +574,22 @@ export default function TeamsPage() {
             <div className="flex gap-4">
               <div className="w-10 h-10 bg-royal-gradient text-white rounded-xl flex items-center justify-center font-bold font-montserrat flex-shrink-0 shadow-md">2</div>
               <div>
-                <p className="font-bold text-gray-900 mb-1">Secure Payment</p>
-                <p className="text-sm text-gray-600">Pay via Razorpay (or select FREE team)</p>
+                <p className="font-bold text-gray-900 mb-1">Pay Platform Fee</p>
+                <p className="text-sm text-gray-600">₹100 (Pro) or ₹250 (Premium) to unlock team access</p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-10 h-10 bg-royal-gradient text-white rounded-xl flex items-center justify-center font-bold font-montserrat flex-shrink-0 shadow-md">3</div>
               <div>
                 <p className="font-bold text-gray-900 mb-1">3-Way Chat Created</p>
-                <p className="text-sm text-gray-600">You, designer, and developer in one room</p>
+                <p className="text-sm text-gray-600">Collaborate with your designer and developer</p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-10 h-10 bg-royal-gradient text-white rounded-xl flex items-center justify-center font-bold font-montserrat flex-shrink-0 shadow-md">4</div>
               <div>
-                <p className="font-bold text-gray-900 mb-1">Start Building!</p>
-                <p className="text-sm text-gray-600">Collaborate and bring your vision to life</p>
+                <p className="font-bold text-gray-900 mb-1">Negotiate & Build</p>
+                <p className="text-sm text-gray-600">Discuss project cost directly with your team</p>
               </div>
             </div>
           </div>

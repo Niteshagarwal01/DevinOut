@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { currentUser } from '@clerk/nextjs/server';
 import dbConnect from '@/lib/mongodb';
 import ChatRoom from '@/models/ChatRoom';
+import User from '@/models/User';
 
 // GET - Fetch all messages from a chat room
 export async function GET(
   request: NextRequest,
-  { params }: { params: { chatRoomId: string } }
+  { params }: { params: Promise<{ chatRoomId: string }> }
 ) {
   try {
     const user = await currentUser();
@@ -14,9 +15,14 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { chatRoomId } = await params;
+
     await dbConnect();
 
-    const chatRoom = await ChatRoom.findById(params.chatRoomId);
+    // Ensure User model is registered
+    await User.init();
+
+    const chatRoom = await ChatRoom.findById(chatRoomId);
     
     if (!chatRoom) {
       return NextResponse.json({ error: 'Chat room not found' }, { status: 404 });
@@ -48,7 +54,7 @@ export async function GET(
 // POST - Send a new message
 export async function POST(
   request: NextRequest,
-  { params }: { params: { chatRoomId: string } }
+  { params }: { params: Promise<{ chatRoomId: string }> }
 ) {
   try {
     const user = await currentUser();
@@ -56,6 +62,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { chatRoomId } = await params;
     const { message } = await request.json();
 
     if (!message || message.trim() === '') {
@@ -64,7 +71,10 @@ export async function POST(
 
     await dbConnect();
 
-    const chatRoom = await ChatRoom.findById(params.chatRoomId);
+    // Ensure User model is registered
+    await User.init();
+
+    const chatRoom = await ChatRoom.findById(chatRoomId);
     
     if (!chatRoom) {
       return NextResponse.json({ error: 'Chat room not found' }, { status: 404 });
