@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFFAF0;
+  --foreground: #2C1810;
+  --royal-red: #8B0000;
+  --royal-red-light: #DC143C;
+  --royal-red-dark: #5C0000;
+  --cream: #FFF8DC;
+  --cream-light: #FFFEF7;
+  --cream-dark: #F5DEB3;
+  --gold: #D4AF37;
+  --gold-light: #FFD700;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-poppins);
+  --font-mono: var(--font-montserrat);
+  --color-royal-red: var(--royal-red);
+  --color-royal-red-light: var(--royal-red-light);
+  --color-royal-red-dark: var(--royal-red-dark);
+  --color-cream: var(--cream);
+  --color-cream-light: var(--cream-light);
+  --color-cream-dark: var(--cream-dark);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-poppins), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.font-poppins {
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.bg-royal-gradient {
+  background: linear-gradient(135deg, var(--royal-red) 0%, var(--royal-red-light) 100%);
+}
+
+.bg-cream-gradient {
+  background: linear-gradient(135deg, var(--cream-light) 0%, var(--cream-dark) 100%);
+}
+
+.text-royal-gradient {
+  background: linear-gradient(135deg, var(--royal-red) 0%, var(--royal-red-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-royal {
+  border-color: var(--royal-red);
+}
+
+.shadow-royal {
+  box-shadow: 0 10px 40px rgba(139, 0, 0, 0.15);
+}
+
+.shadow-royal-lg {
+  box-shadow: 0 20px 60px rgba(139, 0, 0, 0.2);
+}
