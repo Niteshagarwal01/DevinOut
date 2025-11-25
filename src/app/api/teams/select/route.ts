@@ -23,9 +23,6 @@ export async function POST(req: Request) {
 
     await dbConnect();
 
-    // Ensure User model is registered
-    await User.init();
-
     // Get project and verify ownership
     const project = await Project.findById(projectId);
     if (!project) {

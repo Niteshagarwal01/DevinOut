@@ -98,8 +98,6 @@ export async function POST(req: Request) {
     }
 
     await dbConnect();
-    await User.init();
-    await Project.init();
 
     // Get Clerk user info
     const clerkUser = await currentUser();

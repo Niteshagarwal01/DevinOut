@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
     console.log('Fetching projects for Clerk user:', userId);
 
     await dbConnect();
-    await Project.init();
 
     // Fetch all projects for this user, sorted by newest first
     const projects = await Project.find({ 

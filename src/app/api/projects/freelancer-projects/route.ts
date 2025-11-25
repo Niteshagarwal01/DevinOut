@@ -17,9 +17,7 @@ export async function GET(req: NextRequest) {
     await connectToDatabase();
 
     // Ensure User model is registered
-    await User.init();
-
-    // Get freelancer profile
+        // Get freelancer profile
     const freelancerProfile = await FreelancerProfile.findOne({ clerkId: userId });
     
     if (!freelancerProfile) {

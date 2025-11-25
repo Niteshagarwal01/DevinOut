@@ -22,9 +22,7 @@ export async function POST(req: Request) {
     await dbConnect();
 
     // Ensure User model is registered
-    await User.init();
-
-    // Get project
+        // Get project
     const project = await Project.findById(projectId);
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });

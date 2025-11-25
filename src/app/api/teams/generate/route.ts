@@ -78,9 +78,6 @@ export async function POST(req: Request) {
 
     await dbConnect();
 
-    // Ensure User model is registered (needed for populate to work)
-    await User.init();
-
     // Get project
     const project = await Project.findById(projectId);
     if (!project) {

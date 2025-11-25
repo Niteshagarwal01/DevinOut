@@ -23,9 +23,7 @@ export async function GET(request: NextRequest) {
     await dbConnect();
 
     // Ensure User model is registered
-    await User.init();
-
-    const project = await Project.findById(projectId);
+        const project = await Project.findById(projectId);
     
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
