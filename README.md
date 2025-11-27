@@ -136,7 +136,32 @@ RAZORPAY_KEY_SECRET=xxxxx
 ```bash
 npm run seed
 ```
-This creates sample freelancer profiles for testing team matching.
+
+This creates sample freelancer profiles for testing team matching:
+
+```typescript
+const freelancers = [
+  {
+    name: 'Nitesh Agarwal',
+    freelancerType: 'designer',
+    experienceLevel: 'senior',
+    skills: ['Figma', 'Adobe XD', 'UI/UX Design', 'Prototyping'],
+    hourlyRate: 1500,
+    rating: 4.8,
+    completedProjects: 45
+  },
+  {
+    name: 'Nitesh Kumar',
+    freelancerType: 'developer',
+    experienceLevel: 'senior',
+    skills: ['React', 'Next.js', 'TypeScript', 'MongoDB'],
+    hourlyRate: 1800,
+    rating: 4.9,
+    completedProjects: 52
+  }
+  // + 2 more mid-level freelancers
+];
+```
 
 ### 6. Run Development Server
 
@@ -190,6 +215,49 @@ DevinOut/
 └── next.config.ts               # Next.js config
 ```
 
+## 🤖 AI Chatbot Implementation
+
+```typescript
+// Using Groq SDK with Llama 3.3 70B model
+import Groq from 'groq-sdk';
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
+
+// Chat completion with system prompt
+const completion = await groq.chat.completions.create({
+  model: 'llama-3.3-70b-versatile',
+  messages: [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...messages.map((m: any) => ({
+      role: m.role,
+      content: m.content
+    }))
+  ],
+  temperature: 0.7,
+  max_tokens: 500,
+});
+
+const aiResponse = completion.choices[0]?.message?.content;
+```
+
+### Conversation Flow (6 Questions)
+1. **Website Type**: E-commerce, Portfolio, Business, etc.
+2. **Design Complexity**: Simple, Moderate, Advanced
+3. **Features**: Login, Payments, Blog, Admin Panel, etc.
+4. **Number of Pages**: Extracted from user response
+5. **Timeline**: Project duration expectations
+6. **Budget Range**: In Indian Rupees (₹)
+
+After question 6, the AI provides:
+- Project overview and feature analysis
+- Effort estimation (hours calculation)
+- Cost breakdown (Agency vs DevinOut)
+- Recommended team tier
+- Smart suggestions for Indian market
+- Next steps to create teams
+
 ## 🔄 Complete User Flows
 
 ### 💼 Business Owner Journey
@@ -229,39 +297,141 @@ DevinOut/
 
 ## 🎯 AI Team Matching Algorithm
 
-```javascript
+```typescript
+interface TeamScore {
+  designer: any;
+  developer: any;
+  score: number;
+  teamType: 'premium' | 'pro' | 'freemium';
+}
+
 // Score calculation for each team combination
-function calculateMatchScore(designer, developer, project) {
+function calculateMatchScore(
+  designer: any,
+  developer: any,
+  projectDetails: any
+): number {
   let score = 0;
-  
-  // Experience scoring (15 points each)
-  score += experiencePoints[designer.experienceLevel] * 15;
-  score += experiencePoints[developer.experienceLevel] * 15;
-  
-  // Rating (max 50 points)
+
+  // Experience level scoring (30 points max)
+  const expPoints = { junior: 1, mid: 2, senior: 3 };
+  score += expPoints[designer.experienceLevel as keyof typeof expPoints] * 15;
+  score += expPoints[developer.experienceLevel as keyof typeof expPoints] * 15;
+
+  // Rating scoring (50 points max)
   score += designer.rating * 10;
   score += developer.rating * 10;
-  
-  // Completed projects (max 40 points)
+
+  // Completed projects bonus (40 points max)
   score += Math.min(designer.completedProjects * 2, 20);
   score += Math.min(developer.completedProjects * 2, 20);
-  
+
   // Design complexity match (15 points)
-  if (matchesComplexity(designer, project.designComplexity)) {
+  const complexityMatch = {
+    simple: designer.experienceLevel === 'junior' || designer.experienceLevel === 'mid',
+    moderate: designer.experienceLevel === 'mid' || designer.experienceLevel === 'senior',
+    advanced: designer.experienceLevel === 'senior'
+  };
+  
+  if (complexityMatch[projectDetails.designComplexity as keyof typeof complexityMatch]) {
     score += 15;
   }
-  
-  // Skills match (max 30 points)
-  score += calculateSkillsMatch(developer.skills, project.features);
-  
+
+  // Skills match for developer (30 points max)
+  const requiredSkills = projectDetails.features || [];
+  const hasReact = requiredSkills.some((f: string) => 
+    f.toLowerCase().includes('modern') || f.toLowerCase().includes('interactive')
+  );
+  const hasPayment = requiredSkills.some((f: string) => 
+    f.toLowerCase().includes('payment') || f.toLowerCase().includes('checkout')
+  );
+  const hasAuth = requiredSkills.some((f: string) => 
+    f.toLowerCase().includes('login') || f.toLowerCase().includes('auth')
+  );
+
+  if (hasReact && developer.skills.includes('React')) score += 10;
+  if (hasPayment && (developer.skills.includes('Payment Integration') || 
+      developer.skills.includes('Stripe'))) score += 10;
+  if (hasAuth && developer.skills.includes('Authentication')) score += 10;
+
   return score; // Max: ~150 points
 }
 
-// Top 3 teams assigned tiers
-teams.sort((a, b) => b.score - a.score);
-teams[0].teamType = 'premium';  // Highest score
-teams[1].teamType = 'pro';      // Second
-teams[2].teamType = 'freemium'; // Third
+// Calculate all possible team combinations
+const allTeams: TeamScore[] = [];
+
+for (const designer of designers) {
+  for (const developer of developers) {
+    const score = calculateMatchScore(designer, developer, project.projectDetails);
+    allTeams.push({
+      designer,
+      developer,
+      score,
+      teamType: 'freemium'
+    });
+  }
+}
+
+// Sort by score and select top 3
+allTeams.sort((a, b) => b.score - a.score);
+const topTeams = allTeams.slice(0, Math.min(3, allTeams.length));
+
+// Assign team tiers
+if (topTeams.length >= 1) topTeams[0].teamType = 'premium';
+if (topTeams.length >= 2) topTeams[1].teamType = 'pro';
+if (topTeams.length >= 3) topTeams[2].teamType = 'freemium';
+```
+
+## 📐 TypeScript Interfaces
+
+### Freelancer Profile
+```typescript
+export interface IFreelancerProfile {
+  userId: mongoose.Types.ObjectId;
+  clerkId: string;
+  freelancerType: 'designer' | 'developer';
+  skills: string[];
+  experienceLevel: 'junior' | 'mid' | 'senior';
+  portfolioLink?: string;
+  toolsUsed: string[];
+  availabilityStatus: boolean;
+  rating: number;
+  completedProjects: number;
+  hourlyRate?: number;
+  bio?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+### Project
+```typescript
+export interface IProject {
+  businessOwnerId: mongoose.Types.ObjectId;
+  clerkId: string;
+  projectDetails: {
+    websiteType: string;
+    designComplexity: string;
+    features: string[];
+    numPages: number;
+    timeline: string;
+    budgetRange: string;
+    techPreference?: string;
+  };
+  selectedTeam?: {
+    designerId: mongoose.Types.ObjectId;
+    developerId: mongoose.Types.ObjectId;
+    teamType: 'premium' | 'pro' | 'freemium';
+    designerAccepted?: boolean;
+    developerAccepted?: boolean;
+  };
+  status: 'chatting' | 'team_presented' | 'awaiting_acceptance' | 'team_selected' | 'in_progress' | 'completed' | 'cancelled';
+  chatRoomId?: mongoose.Types.ObjectId;
+  paymentStatus?: 'pending' | 'paid' | 'refunded';
+  razorpayOrderId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 ```
 
 ## 💰 Pricing Model
